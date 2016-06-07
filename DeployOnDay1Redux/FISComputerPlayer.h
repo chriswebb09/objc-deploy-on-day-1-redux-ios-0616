@@ -9,6 +9,7 @@
 #import "FISTicTacToeGame.h"
 
 
+
 typedef struct {
     NSUInteger column;
     NSUInteger row;
@@ -23,6 +24,8 @@ FISTicTacToePosition FISTicTacToePositionMake(NSUInteger column, NSUInteger row)
 
 @property (nonatomic, copy) NSString *symbol;
 @property (nonatomic, weak) FISTicTacToeGame *game;
+@property (nonatomic, strong) NSMutableArray *board;
+
 
 -(FISTicTacToePosition)nextPlay;
 

@@ -29,6 +29,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *oPlayerAIIconLabel;
 @property (weak, nonatomic) IBOutlet UILabel *oPlayerWinsLabel;
 
+
+
 @property (nonatomic, strong) FISTicTacToeGame *game;
 @property (nonatomic, strong) id<FISTicTacToePlayer> xPlayer;
 @property (nonatomic, strong) id<FISTicTacToePlayer> oPlayer;
@@ -44,9 +46,14 @@
 
 @implementation FISTicTacToeViewController
 
--(void)viewDidLoad
-{
+-(void)viewDidLoad {
+    
+    
     [super viewDidLoad];
+    [super viewWillAppear:YES];
+    [super viewWillDisappear:YES];
+    
+    
 
     for(FISBoardSpaceView *boardSpace in self.boardSpaces) {
         [boardSpace addTarget:self action:@selector(boardSpaceTapped:) forControlEvents:UIControlEventTouchUpInside];
@@ -195,6 +202,10 @@
     [self performSegueWithIdentifier:@"GameToWinModalSegueID" sender:nil];
 }
 
+
+
+
+
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     FISGameOverViewController *gameOverVC = segue.destinationViewController;
@@ -237,5 +248,34 @@
 {
     return YES;
 }
+
+-(void)viewWillAppear:(BOOL)animated {
+    
+    [super viewWillAppear:YES];
+//    NSInteger xDefaultValue = [[NSUserDefaults standardUserDefaults] integerForKey:@"SavePlayerXWins"];
+//    NSInteger oDefaultValue = [[NSUserDefaults standardUserDefaults] integerForKey:@"SavePlayerOWins"];
+    
+//    NSLog(@"%lu", xDefaultValue);
+//    NSLog(@"%lu", oDefaultValue);
+    
+    self.game.xPlayerWinCount = [[NSUserDefaults standardUserDefaults] integerForKey:@"SavePlayerXWins"];
+    NSLog(@"%lu", self.game.xPlayerWinCount);
+    self.game.oPlayerWinCount = [[NSUserDefaults standardUserDefaults] integerForKey:@"SavePlayerOWins"];
+    NSLog(@"%lu", self.game.oPlayerWinCount);
+    [self setUpPlayerDisplays];
+}
+
+
+-(void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:YES];
+    [[NSUserDefaults standardUserDefaults] setInteger:self.game.xPlayerWinCount forKey:@"SavePlayerXWins"];
+    [[NSUserDefaults standardUserDefaults] setInteger:self.game.oPlayerWinCount forKey:@"SavePlayerOWins"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    NSLog(@"%li %li", self.game.xPlayerWinCount, self.game.oPlayerWinCount);
+}
+
+
+
 
 @end
